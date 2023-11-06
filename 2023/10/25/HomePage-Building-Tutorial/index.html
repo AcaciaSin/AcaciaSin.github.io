@@ -16,12 +16,12 @@
   <meta name="author" content="Ziting">
   <meta name="keywords" content="">
   
-    <meta name="description" content="快速搭建指南前期准备工作三个必要元素：使用git，下载node.js，挑选心仪的hexo主题。 hexo主题选择：hexo官网 网站搭建指南：hexo官方教程 50min快速搭建过程主题选择首先，参考官方指南操作（可以选择terminal的路径为Desktop）。指令如下： 1234$ cd Desktop$ hexo init &lt;folder&gt;$ cd &lt;folder&gt;$">
+    <meta name="description" content="快速搭建指南 前期准备工作 三个必要元素：使用git，下载node.js，挑选心仪的hexo主题。 hexo主题选择：hexo官网 网站搭建指南：hexo官方教程 50min快速搭建过程 主题选择 首先，参考官方指南操作（可以选择terminal的路径为Desktop）。指令如下： 1234$ cd Desktop$ hexo init &lt;folder&gt;$ cd &lt;folder&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Acacia‘s 主页的诞生">
 <meta property="og:url" content="http://example.com/2023/10/25/HomePage-Building-Tutorial/index.html">
 <meta property="og:site_name" content="Acacia">
-<meta property="og:description" content="快速搭建指南前期准备工作三个必要元素：使用git，下载node.js，挑选心仪的hexo主题。 hexo主题选择：hexo官网 网站搭建指南：hexo官方教程 50min快速搭建过程主题选择首先，参考官方指南操作（可以选择terminal的路径为Desktop）。指令如下： 1234$ cd Desktop$ hexo init &lt;folder&gt;$ cd &lt;folder&gt;$">
+<meta property="og:description" content="快速搭建指南 前期准备工作 三个必要元素：使用git，下载node.js，挑选心仪的hexo主题。 hexo主题选择：hexo官网 网站搭建指南：hexo官方教程 50min快速搭建过程 主题选择 首先，参考官方指南操作（可以选择terminal的路径为Desktop）。指令如下： 1234$ cd Desktop$ hexo init &lt;folder&gt;$ cd &lt;folder&amp;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-10-25T13:51:51.000Z">
 <meta property="article:modified_time" content="2023-10-25T14:16:55.671Z">
@@ -272,62 +272,53 @@
             
               <div class="markdown-body">
                 
-                <h1 id="快速搭建指南"><a href="#快速搭建指南" class="headerlink" title="快速搭建指南"></a>快速搭建指南</h1><h2 id="前期准备工作"><a href="#前期准备工作" class="headerlink" title="前期准备工作"></a>前期准备工作</h2><p>三个必要元素：使用git，下载node.js，挑选心仪的hexo主题。</p>
+                <h1 id="快速搭建指南">快速搭建指南</h1>
+<h2 id="前期准备工作">前期准备工作</h2>
+<p>三个必要元素：使用git，下载node.js，挑选心仪的hexo主题。</p>
 <p>hexo主题选择：<a target="_blank" rel="noopener" href="https://hexo.io/index.html">hexo官网</a></p>
 <p>网站搭建指南：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/setup">hexo官方教程</a></p>
-<h2 id="50min快速搭建过程"><a href="#50min快速搭建过程" class="headerlink" title="50min快速搭建过程"></a>50min快速搭建过程</h2><h4 id="主题选择"><a href="#主题选择" class="headerlink" title="主题选择"></a>主题选择</h4><p>首先，参考官方指南操作（可以选择terminal的路径为Desktop）。指令如下：</p>
+<h2 id="min快速搭建过程">50min快速搭建过程</h2>
+<h4 id="主题选择">主题选择</h4>
+<p>首先，参考官方指南操作（可以选择terminal的路径为Desktop）。指令如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">cd</span> Desktop<br>$ hexo init &lt;folder&gt;<br>$ <span class="hljs-built_in">cd</span> &lt;folder&gt;<br>$ npm install<br></code></pre></td></tr></table></figure>
-
 <p>然后，根据自己挑选的主题教程（下文参考来源），执行主题安装指令（以下为my theme）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ npm install --save hexo-theme-fluid<br></code></pre></td></tr></table></figure>
-
 <p>然后在博客目录下创建 _config.fluid.yml，将主题的 _config.yml 内容复制进去。</p>
 <p>修改 Hexo 博客目录中的 _config.yml：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">theme: fluid  <span class="hljs-comment"># 指定主题</span><br>language: zh-CN  <span class="hljs-comment"># 指定语言，会影响主题显示的语言，按需修改</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="页面相关操作（一般在host4000）"><a href="#页面相关操作（一般在host4000）" class="headerlink" title="页面相关操作（一般在host4000）"></a>页面相关操作（一般在host4000）</h3><ol>
+<h3 id="页面相关操作一般在host4000">页面相关操作（一般在host4000）</h3>
+<ol type="1">
 <li>预览页面</li>
 </ol>
 <p>根据如下指令结果打开静态页面：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>生成静态文件</li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>Deploy&#x2F;同步到github主页</li>
+<ol start="3" type="1">
+<li>Deploy/同步到github主页</li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<ol start="4">
+<ol start="4" type="1">
 <li>生成新Post</li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="Github部署"><a href="#Github部署" class="headerlink" title="Github部署"></a>Github部署</h3><p>首先，得给git设置代理，以下指令查看是否有代理。</p>
+<h3 id="github部署">Github部署</h3>
+<p>首先，得给git设置代理，以下指令查看是否有代理。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ git config -l<br></code></pre></td></tr></table></figure>
-
-<p>然后，在Github上创建新的仓库，仓库名需为’username.github.io’</p>
-<p>再接着，需要绑定SSH。‘user@email’处输入github登陆时使用的邮箱即可。</p>
+<p>然后，在Github上创建新的仓库，仓库名需为'username.github.io'</p>
+<p>再接着，需要绑定SSH。'user@email'处输入github登陆时使用的邮箱即可。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ssh-keygen -t rsa -C user@email<br></code></pre></td></tr></table></figure>
-
 <p>需要去找到ssh的key：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">cat</span> ~/.ssh/id_rsa.pub<br></code></pre></td></tr></table></figure>
-
-<p>找到github setting，点击’ssh and GPG keys’，新建’ssh’，把上一步终端里面的内容复制进去。</p>
+<p>找到github setting，点击'ssh and GPG keys'，新建'ssh'，把上一步终端里面的内容复制进去。</p>
 <p>在git bash输入指令查看是否生成成功。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh -T git@github.com<br></code></pre></td></tr></table></figure>
-
-<p>最后，修改’_config.yml’最后一行的配置:</p>
+<p>最后，修改'_config.yml'最后一行的配置:</p>
 <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">deploy:</span><br><span class="hljs-symbol">  type:</span> git<br><span class="hljs-symbol">  repository:</span> https:<span class="hljs-comment">//github.com/acaciasin/acaciasin.github.io.git</span><br><span class="hljs-symbol">  branch:</span> master<br></code></pre></td></tr></table></figure>
-
-<p>且安装好’deploy-git’。</p>
+<p>且安装好'deploy-git'。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ npm install hexo-deployer-git --save<br></code></pre></td></tr></table></figure>
-
-
-
 
                 
               </div>
@@ -389,6 +380,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/11/06/DiffusionNLP/" title="Diffusion Models + NLP 杂谈">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Diffusion Models + NLP 杂谈</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
@@ -452,6 +449,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -645,6 +648,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

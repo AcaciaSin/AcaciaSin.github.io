@@ -1,0 +1,827 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ziting">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Exploring the Future of Diffusion Models in NLP 引言 这篇博客用于记录9月-10月的看论文心得，关于Diffusion Model和NLP结合的探索。（当然，11月的我现在觉得几乎完全一种蹭热度的科研废物，毫无意义）不过，还是可以简单探索一下。 所以，本篇博客主要focus在以下四个方面：  回顾一些主流的Diffusion Model 和 NLP结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Diffusion Models + NLP 杂谈">
+<meta property="og:url" content="http://example.com/2023/11/06/DiffusionNLP/index.html">
+<meta property="og:site_name" content="Acacia">
+<meta property="og:description" content="Exploring the Future of Diffusion Models in NLP 引言 这篇博客用于记录9月-10月的看论文心得，关于Diffusion Model和NLP结合的探索。（当然，11月的我现在觉得几乎完全一种蹭热度的科研废物，毫无意义）不过，还是可以简单探索一下。 所以，本篇博客主要focus在以下四个方面：  回顾一些主流的Diffusion Model 和 NLP结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/review_skills.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/formula1.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/Method1.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/formula3.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/formula4.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/formula5.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/Method2.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/formula6.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/results1.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/results2.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/results3.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/Method3.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/results4.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/results5.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/Method4.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/results6.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/Method5.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/Method6.png">
+<meta property="og:image" content="http://example.com/img/DiffusionNLP/results7.png">
+<meta property="article:published_time" content="2023-11-06T01:19:15.000Z">
+<meta property="article:modified_time" content="2023-11-06T08:48:36.196Z">
+<meta property="article:author" content="Ziting">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/DiffusionNLP/review_skills.png">
+  
+  
+  
+  <title>Diffusion Models + NLP 杂谈 - Acacia</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5-a","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Acacia</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Diffusion Models + NLP 杂谈"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-06 09:19" pubdate>
+          2023年11月6日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Diffusion Models + NLP 杂谈</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="exploring-the-future-of-diffusion-models-in-nlp">Exploring the Future of Diffusion Models in NLP</h1>
+<h2 id="引言">引言</h2>
+<p>这篇博客用于记录9月-10月的看论文心得，关于Diffusion Model和NLP结合的探索。（当然，11月的我现在觉得几乎完全一种蹭热度的科研废物，毫无意义）不过，还是可以简单探索一下。</p>
+<p>所以，本篇博客主要focus在以下四个方面：</p>
+<ul>
+<li>回顾一些主流的Diffusion Model 和 NLP结合方法</li>
+<li>介绍更大规模的 diffusion 和 nlp 结合的模型，即参数更多。</li>
+<li>介绍 diffusion 和 nlp 结合的小众应用方式（文本生成以外）</li>
+<li>Diffusion Model 结合novel的文本生成方法</li>
+</ul>
+<h3 id="review">1. Review</h3>
+<figure>
+<img src="/img/DiffusionNLP/review_skills.png" srcset="/img/loading.gif" lazyload alt="review" /><figcaption aria-hidden="true">review</figcaption>
+</figure>
+<p>这张图来自今年5月份的survey-<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.14671">A Survey of Diffusion Models in Natural Language Processing</a>。</p>
+<p>比如，能提高文本生成性能的方法有self-conditioning等。用在continuous diffusion中的则是图片右半边部份的策略，比如anchor loss也在diffusion-LM中使用了。</p>
+<p>除此之外，在检索论文时，也有看过一篇diffusion+NLP的paper，它在别人的模型上加了self-conditioning的方法，就说自己性能提高了比别人好。我个人认为是比较滑水的做法。</p>
+<h3 id="scale-up-the-diffusion-models-in-nlp">2. Scale up the diffusion models in NLP</h3>
+<p>第一篇 paper ：<a target="_blank" rel="noopener" href="https://aclanthology.org/2023.acl-long.647.pdf">SSD-LM</a>，SSD-LM是2022年10月挂在Arxiv的paper，中了ACL2023。</p>
+<h4 id="相关的背景知识">相关的背景知识</h4>
+<ol type="1">
+<li>Diffusion Model，太复杂了，本篇不做详细介绍。</li>
+<li>自回归语言模型。对于一个 <span class="math inline">\(w_0\)</span>，<span class="math inline">\(w_1\)</span>，到 <span class="math inline">\(w_{l-1}\)</span> 的长度为 <span class="math inline">\(L\)</span> 的 sequence ，在自回归语言模型中可以表示为公式4，即当前token是由前面所有token预测得到。</li>
+</ol>
+<figure>
+<img src="/img/DiffusionNLP/formula1.png" srcset="/img/loading.gif" lazyload alt="formula1" /><figcaption aria-hidden="true">formula1</figcaption>
+</figure>
+<p>这个模型的 <mark>Decoding</mark> 的过程同理，是通过 left-to-right 的迭代生成方式。这类自回归模型也有缺点，比如说容易导致句子重复，以及没法自然的融合sequence-level的可控生成。</p>
+<p>因此在这篇文章中，作者通过提出了一个半自回归的语言模型，它通过结合 diffusion models 来解决 autoregressive model 的一些问题。</p>
+<h3 id="ssd-lm">2-1 SSD-LM</h3>
+<h4 id="method">Method</h4>
+<p>在SSD-LM中，diffusion model使用高斯噪声来解码长度为 <span class="math inline">\(b\)</span> 个tokens的一个块，且以 <span class="math inline">\(w^{&lt;c}\)</span> 的 tokens 组成序列作为条件。</p>
+<h4 id="training">Training</h4>
+<p>如图所示，<mark>前向扩散过程</mark>是在某个 token <span class="math inline">\(w\)</span> 上进行，而不是在全部tokens 上面进行。</p>
+<figure>
+<img src="/img/DiffusionNLP/Method1.png" srcset="/img/loading.gif" lazyload alt="method1" /><figcaption aria-hidden="true">method1</figcaption>
+</figure>
+<p>在training的过程中，首先进行mapping，把每个token <span class="math inline">\(w\)</span> 对应一个维度跟词表大小一样维度的one-hot向量，表示每个单词的对率。</p>
+<p>然后使用连续的高斯噪声进行前向扩散过程。loss函数中，也是用了似然来替代l2 distance。</p>
+<figure>
+<img src="/img/DiffusionNLP/formula3.png" srcset="/img/loading.gif" lazyload alt="formula3" /><figcaption aria-hidden="true">formula3</figcaption>
+</figure>
+<figure>
+<img src="/img/DiffusionNLP/formula4.png" srcset="/img/loading.gif" lazyload alt="formula4" /><figcaption aria-hidden="true">formula4</figcaption>
+</figure>
+<h4 id="decoding">Decoding</h4>
+<p>在解码过程中，模型使用噪声对率作为输入，并通过预测对率来估计原始token的分布。同时，为了进行逆向diffusion过程，设计一个logits-projection的方式，让预测数据表征接近原始数据表征（almost-one-hot）。</p>
+<p>decoding的过程从纯噪声开始采样，并使用第t步计算t-1的值，与一般的reverse diffuson过程相似。</p>
+<figure>
+<img src="/img/DiffusionNLP/formula5.png" srcset="/img/loading.gif" lazyload alt="formula5" /><figcaption aria-hidden="true">formula5</figcaption>
+</figure>
+<p>为了生成下一个的block，把当前block连接到之前的blocks以创建一个长度为 c+B 的新上下文，并再次遵循上述反向扩散过程。 重复此过程，直到达到所需的最大长度。</p>
+<figure>
+<img src="/img/DiffusionNLP/Method2.png" srcset="/img/loading.gif" lazyload alt="Method2" /><figcaption aria-hidden="true">Method2</figcaption>
+</figure>
+<p>最后是，高度模块化可控的过程，增加了目标方向y，并在梯度更新过程中，让模型靠近classifer的指导。</p>
+<figure>
+<img src="/img/DiffusionNLP/formula6.png" srcset="/img/loading.gif" lazyload alt="formula6" /><figcaption aria-hidden="true">formula6</figcaption>
+</figure>
+<p>得到的结果如下图所示，可以看出来在一些评价指标上，优于参数量更大的GPT2模型。在可控生成方向，也表现出了较好的可控性。</p>
+<figure>
+<img src="/img/DiffusionNLP/results1.png" srcset="/img/loading.gif" lazyload alt="result1" /><figcaption aria-hidden="true">result1</figcaption>
+</figure>
+<p>这篇文章在结合了autoregressive language model和non-autoregressive diffusion model的特点。SSD-LM的<mark>局限性</mark>在于采样效率、解码速度和固定的解码block size。</p>
+<h3 id="ssd-2">2-2 SSD-2</h3>
+<p>因为我最近主要都是在看diffusion nlp结合的文章，我发现<mark>大多数文章，都几乎没有与大语言模型进行对比</mark>，直到看到了这篇文章，<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.14771">SSD-2</a>，这篇文章是今年5月发表的，在GPT-4提出来之后的。</p>
+<p>也是同一个作者，作者的工作是在 MetaAI 工作过程完成的，<mark>SSD-2</mark> 是base 在SSD-LM模型上开展的。不同之处在于SSD-LM的模型参数只有0.4B，但是SSD-2的模型参数扩大到了<mark>13B</mark>，虽然远远达不到LLM的参数规模，但是在现有的Diffusion和NLP结合的模型中最大。</p>
+<p>相比于SSD-LM模型：</p>
+<ul>
+<li>0.4B 拓展到 13B 的参数规模。</li>
+<li>加入了一些（我在review中提到的）<strong>skills</strong>，比如说self-conditioning。这些skills都能在不同方面提升模型的性能。</li>
+<li>使用了finetuning的方法，对instruction相关的dataset进行了finetune。作者得出的结论是，对比与Autoregressive模型的baseline，SSD-2的finetune模型效率更好，因为能够更好地利用双向的本文信息。</li>
+</ul>
+<figure>
+<img src="/img/DiffusionNLP/results2.png" srcset="/img/loading.gif" lazyload alt="results2" /><figcaption aria-hidden="true">results2</figcaption>
+</figure>
+<p>这张图是作者在训练时尝试了三种不同的参数规模，且从图中可看出来，13B的模型loss值还比较高，模型受限于计算资源没有完成收敛。而后面的实验结果，也全是在模型未完全收敛的情况下进行对比的。</p>
+<h4 id="spotlight1-chat-style-instruction-finetuning">Spotlight1: Chat-style instruction finetuning</h4>
+<p>这篇文章相对比与之前的diffusion nlp结合的文章，我觉得他的亮点首先是chat-style 的instruction finetuning的方式。很好的结合了当前的热点，也没有回避大语言模型在当前NLP领域的引领地位。同时尝试在diffusionNLP模型中进行了对话的形式。</p>
+<p>作者使用dolly dataset进行finetune，他也是alpaca和vicuna模型用来训练的数据集。对于ssd-2 finetune性能评价，使用了GPT-4模型。从实验结果表中可以看出，SSD-2模型在同规模自回归模型中具有竞争力。</p>
+<figure>
+<img src="/img/DiffusionNLP/results3.png" srcset="/img/loading.gif" lazyload alt="results3" /><figcaption aria-hidden="true">results3</figcaption>
+</figure>
+<p>且作者指出，使用的对比模型相比于SSD-2，使用了更多数据集进行训练，但SSD-2仍然在胜过某些模型。因此作者认为，如果ssd-2使用相同规模的模型参数进行训练，可能能够表现的更好。</p>
+<h4 id="spotlight2-inference-time-collaboration">Spotlight2: Inference-time collaboration</h4>
+<p>第二个亮点 则考虑了用户交互的过程。现在的大语言模型是比较通用的，但用户会更偏向于使用结合自身情况的模型，而SSD-2则考虑了这种情况。</p>
+<p>首先是问题的set up：</p>
+<ul>
+<li>Purpose: to customize the system with their own data.</li>
+<li>Setup:
+<ul>
+<li><mark>A core model <span class="math inline">\(θ_{core}\)</span></mark> : good at general-domain instruction following.</li>
+<li><mark>A user model <span class="math inline">\(θ_{user}\)</span> </mark>: computationally friendly for a typical user to run on their personal device or a cloud device to their control.</li>
+<li><mark>A prompting instruction <span class="math inline">\(w_{inst}\)</span><mark/> both the models have access to.</li>
+<li><mark>A expert data <span class="math inline">\(D_user\)</span></mark> only the user model and not the core model has access to.</li>
+</ul></li>
+</ul>
+<p>Core model擅长于通用领域的指令回答。User model 对于用户更加友好，适用于个人设备或者云设备。Prompting instruction 和 expert data， 即用户个人数据</p>
+<figure>
+<img src="/img/DiffusionNLP/Method3.png" srcset="/img/loading.gif" lazyload alt="method3" /><figcaption aria-hidden="true">method3</figcaption>
+</figure>
+<p>During inference:</p>
+<ul>
+<li><span class="math inline">\(θ_{core}\)</span> only takes in the prompt <span class="math inline">\(w_{inst}\)</span>, <span class="math inline">\(f_{θ_{core}} (w_{inst})\)</span>.</li>
+<li>the user model takes in both the user expert data and the instruction as input <span class="math inline">\(f_{θ_{user}} (D_{user}, w_{inst})\)</span>.</li>
+</ul>
+<p>在inference 阶段Core model 使用prompt作为输入，user model把expert data和prompt同时作为输入。不同于autoregressive models，diffusion based models可以使用双向上下文迭代优化生成的令牌块。</p>
+<p>结果也是使用GPT3.5进行评分。可以看出，提出的SSD-2模型在collaboration协作的setting下面，有一定的效果。</p>
+<figure>
+<img src="/img/DiffusionNLP/results4.png" srcset="/img/loading.gif" lazyload alt="results4" /><figcaption aria-hidden="true">results4</figcaption>
+</figure>
+<h3 id="different-applications-of-diffusion-models-in-nlp">3. Different applications of diffusion models in NLP</h3>
+<p>第三个我想提及的diffusion nlp发展方向是，除了文本生成外的应用方向。 <a target="_blank" rel="noopener" href="https://aclanthology.org/2023.findings-acl.478.pdf">DiffuDetox</a>是ACL2023的文章，把diffusion和nlp结合的模型应用到了文本去毒里。可以理解为去除一些粗俗不适的文本，如table1所示。</p>
+<figure>
+<img src="/img/DiffusionNLP/results5.png" srcset="/img/loading.gif" lazyload alt="results5" /><figcaption aria-hidden="true">results5</figcaption>
+</figure>
+<p>而diffudetox使用了混合的有条件和无条件的diffusion model。其中条件diffusion model把toxic text作为条件输入，而无条件的模型的训练是为了还原输入的文本内容。</p>
+<p>DiffuDetox:</p>
+<ul>
+<li>a mixed conditional and unconditional diffusion model for text detoxification.</li>
+<li>The conditional model takes toxic text as the condition and reduces its toxicity, yielding a diverse set of detoxified sentences.</li>
+<li>The unconditional model is trained to recover the input text, which allows the introduction of additional fluent text for training and thus ensures text fluency.</li>
+</ul>
+<p>框架如图所示:</p>
+<figure>
+<img src="/img/DiffusionNLP/Method4.png" srcset="/img/loading.gif" lazyload alt="method4" /><figcaption aria-hidden="true">method4</figcaption>
+</figure>
+<p>然后是实验结果，也能看出这种方法会大部份baseline好，甚至在一些指标上达到了sota性能。</p>
+<figure>
+<img src="/img/DiffusionNLP/results6.png" srcset="/img/loading.gif" lazyload alt="results6" /><figcaption aria-hidden="true">results6</figcaption>
+</figure>
+<h3 id="novel-text-generation-ways">4. Novel text generation ways</h3>
+<p>最后一个可能可以进行下去的方向是提出一些新颖的与diffusion model结合的文本生成方式。去年我在ICLR2023上看到了一种语言模型的生成方式: <a target="_blank" rel="noopener" href="https://openreview.net/forum?id=FkSp8VW8RjH">Language Modelling with Pixels</a>，是使用像素（图像）的方式对文本进行建模，再生成。其框架如下所示。使用这种方法的好处是，对于拼写错误攻击和语言代码切换更健壮。</p>
+<figure>
+<img src="/img/DiffusionNLP/Method5.png" srcset="/img/loading.gif" lazyload alt="method5" /><figcaption aria-hidden="true">method5</figcaption>
+</figure>
+<p>然后我在进行diffusion model和nlp检索时，也看到了引用了这篇文章的一个paper: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2304.12519">GlyphDiffusion: Text Generation Is Also Image Generation</a>，是今年4月份挂在arxiv上的文章，它的建模方式跟ICLR那篇文章是一样。</p>
+<figure>
+<img src="/img/DiffusionNLP/Method6.png" srcset="/img/loading.gif" lazyload alt="method6" /><figcaption aria-hidden="true">method6</figcaption>
+</figure>
+<p>实验结果如下：</p>
+<figure>
+<img src="/img/DiffusionNLP/results7.png" srcset="/img/loading.gif" lazyload alt="results7" /><figcaption aria-hidden="true">results7</figcaption>
+</figure>
+<p>同时，这篇文章比起对文本diffusion有一个好处是，可以直接把在图像diffusion领域发展的先进知识引入进来。结果如下所示，作者认为使用这种建模方法能够产生更diverse的文本，同时减少重复和错误拼写。</p>
+<h2 id="结论">结论</h2>
+<p>这个内容是我<code>Date:231023</code>做组会时的汇报，主要是结合了前段时间的工作展开介绍。写这篇Blog时，距离work DDL只有4天，所以算是Diffusion + NLP 的一篇收尾汇总啦。如果不出意外，此系列几乎不更新了。</p>
+<p>算是第一篇内容Blog完结撒花 🎉 ？</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Diffusion Models + NLP 杂谈</div>
+      <div>http://example.com/2023/11/06/DiffusionNLP/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ziting</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/25/HomePage-Building-Tutorial/" title="Acacia‘s 主页的诞生">
+                        <span class="hidden-mobile">Acacia‘s 主页的诞生</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
